@@ -1,0 +1,50 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: white;
+  height: 100px;
+  padding: 20px;
+}
+.Paradero {
+  height: 10px;
+  padding: 20px;
+  color: red;
+}
+
+.column {
+    float: left;
+    width: 48%;
+    padding: 40px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.App-graficos {
+  padding: 40px;
+}
+
+.App-contenido {
+  background: #f85032;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #e73827, #f85032);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #e73827, #f85032); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  height: 15px;
+}
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
