@@ -174,9 +174,8 @@ class App extends Component {
 
         // informacion ocupacion
         //paradero 1
-        const url_ocupacion_1 = "http://proyectozapo.herokuapp.com/api/v1/amount_of_passengers?bus_stop="+this.state.Paraderos[0]+"&start="+start+"&end="+end;
-        console.log(url_ocupacion_1);
-        console.log("ahora viene ocupacion")
+        const url_ocupacion_1 = "https://proyectozapo.herokuapp.com/api/v1/amount_of_passengers?bus_stop="+this.state.Paraderos[0]+"&start="+start+"&end="+end;
+
         fetch(url_ocupacion_1, {
             method: 'GET',
             headers: {
@@ -187,39 +186,55 @@ class App extends Component {
         .then((responseData) => {
           console.log("Informacion ocupacion paradero 1")
           console.log(responseData)
+          console.log("Informacion ocupacion paradero 1")
           if (responseData.error != ""){
-            // se deveria cambiar la data mas abajo
 
+            var dates = []
+            var amounts = []
+
+            for (var i = 0; i < responseData.length; i++){
+              dates.push(responseData[i].date)
+              amounts.push(responseData[i].amount)
+            }
+            var colores = []
+            for (var i = 0; i < dates.length; i++){
+              colores.push('rgba('+ Math.floor((Math.random() * 255) + 1)+ ','+Math.floor((Math.random() * 255) + 1)+','+Math.floor((Math.random() * 255) + 1)+', 0.6)')
+            }
             var elemento_1 = {
-                  labels: ['00:05', '01:04', '00:05', '01:04'],
+                  labels: dates,
                   datasets:[
                     {
                       label:'Personas',
-                      data:[
-                        1,
-                        2,
-                        3,
-                        4
-                      ],
-                      backgroundColor:[
-                        'rgba(255, 99, 132, 0.6)',
-                        'rgba(54, 162, 235, 0.6)',
-                        'rgba(255, 99, 132, 0.6)',
-                        'rgba(54, 162, 235, 0.6)'
-                      ]
+                      data:amounts,
+                      backgroundColor:colores
                     }
                   ]
             }
+            console.log("hola");
+            console.log(elemento_1);
+            console.log("hola");
 
             this.setState((prevState, props) => ({
                 OcupacionchartData_1: elemento_1
             }));
           } else {
-            console.log("no");
+            var elemento_1 = {
+                  labels: [],
+                  datasets:[
+                    {
+                      label:'Personas',
+                      data:[],
+                      backgroundColor:[]
+                    }
+                  ]
+            }
+            this.setState((prevState, props) => ({
+                OcupacionchartData_1: elemento_1
+            }));
           }
           })
           // paradero 2
-          const url_ocupacion_2 = "http://proyectozapo.herokuapp.com/api/v1/amount_of_passengers?bus_stop="+this.state.Paraderos[1]+"&start="+start+"&end="+end;
+          const url_ocupacion_2 = "https://proyectozapo.herokuapp.com/api/v1/amount_of_passengers?bus_stop="+this.state.Paraderos[1]+"&start="+start+"&end="+end;
 
           fetch(url_ocupacion_2, {
               method: 'GET',
@@ -229,42 +244,65 @@ class App extends Component {
           })
           .then((response) => response.json())
           .then((responseData) => {
+            console.log("Informacion ocupacion paradero 2")
+            console.log(responseData)
+            console.log("Informacion ocupacion paradero 2")
             if (responseData.error != ""){
-              // se deveria cambiar la data mas abajo
+
+              var dates = []
+              var amounts = []
+
+              for (var i = 0; i < responseData.length; i++){
+                dates.push(responseData[i].date)
+                amounts.push(responseData[i].amount)
+              }
+
+
+              var colores = []
+              for (var i = 0; i < dates.length; i++){
+                colores.push('rgba('+ Math.floor((Math.random() * 255) + 1)+ ','+Math.floor((Math.random() * 255) + 1)+','+Math.floor((Math.random() * 255) + 1)+', 0.6)')
+              }
 
               var elemento_2 = {
-                    labels: ['00:05', '01:04', '00:05', '01:04'],
+                    labels: dates,
                     datasets:[
                       {
                         label:'Personas',
-                        data:[
-                          1,
-                          2,
-                          3,
-                          4
-                        ],
-                        backgroundColor:[
-                          'rgba(255, 99, 132, 0.6)',
-                          'rgba(54, 162, 235, 0.6)',
-                          'rgba(255, 99, 132, 0.6)',
-                          'rgba(54, 162, 235, 0.6)'
-                        ]
+                        data:amounts,
+                        backgroundColor:colores
+                      }
+                    ]
+              }
+              console.log("hola");
+              console.log(elemento_2);
+              console.log("hola");
+
+
+              this.setState((prevState, props) => ({
+                  OcupacionchartData_2: elemento_2
+              }));
+            } else {
+              var elemento_2 = {
+                    labels: [],
+                    datasets:[
+                      {
+                        label:'Personas',
+                        data:[],
+                        backgroundColor:[]
                       }
                     ]
               }
 
 
               this.setState((prevState, props) => ({
-                  OcupacionchartData_1: elemento_2
+                  OcupacionchartData_2: elemento_2
               }));
-            } else {
-              console.log("no");
             }
             })
           // informacion de los Buses
           //paradero 1
-          const url_buses_1 = 'http://proyectozapo.herokuapp.com/api/v1/bus_events?bus_stops={"data":['+ '"'+this.state.Paraderos[0] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
-          console.log(url_buses_1);
+          const url_buses_1 = 'https://proyectozapo.herokuapp.com/api/v1/bus_events?bus_stops={"data":['+ '"'+this.state.Paraderos[0] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
+
           fetch(url_buses_1, {
               method: 'GET',
               headers: {
@@ -273,25 +311,38 @@ class App extends Component {
           })
           .then((response) => response.json())
           .then((responseData) => {
-            console.log("Informacion buses !! paradero 1")
+            console.log("Informacion Buses paradero 1")
             console.log(responseData);
-            console.log("Informacion buses !! paradero 1")
+            console.log("Informacion Buses paradero 1")
             if (responseData.error != ""){
               // se deveria cambiar la data mas abajo
+              var patentes = []
+              var detenciones = []
+              var horas = []
+              var recorridos = []
 
+              for (var i = 0; i < responseData.length; i++){
+                patentes.push(responseData[i].plate_number)
+                if (responseData[i].bus_speed == "1.0"){
+                  detenciones.push("Se detuvo")
+                } else {
+                  detenciones.push("No se detuvo")
+                }
+                horas.push(responseData[i].event_time)
+                recorridos.push(responseData[i].route_code)
+              }
 
               var elemento_1 = {
-                patente: ['ejemplo2','ejemplo2'],
-                detencion: ['Se detuvo', 'No se detuvo'],
-                hora: ['8:30', '9:30'],
-                recorrido: ['c01', 'c09']
+                patente: patentes,
+                detencion: detenciones,
+                hora: horas,
+                recorrido: recorridos
               }
 
               this.setState((prevState, props) => ({
                   BusesData_1: elemento_1
               }));
             } else {
-              console.log("no");
               var elemento_1 = {
                 patente: [],
                 detencion: [],
@@ -305,8 +356,8 @@ class App extends Component {
             }
           })
         // paradero 2
-        const url_buses_2 = 'http://proyectozapo.herokuapp.com/api/v1/bus_events?bus_stops={"data":['+ '"'+this.state.Paraderos[1] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
-        console.log(url_buses_2);
+        const url_buses_2 = 'https://proyectozapo.herokuapp.com/api/v1/bus_events?bus_stops={"data":['+ '"'+this.state.Paraderos[1] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
+
         fetch(url_buses_2, {
             method: 'GET',
             headers: {
@@ -315,17 +366,32 @@ class App extends Component {
         })
         .then((response) => response.json())
         .then((responseData) => {
-          console.log("Informacion buses !! paradero 2")
+          console.log("Informacion Buses paradero 2")
           console.log(responseData);
-          console.log("Informacion buses !! paradero 2")
+          console.log("Informacion Buses paradero 2")
           if (responseData.error != ""){
             // se deveria cambiar la data mas abajo
+            var patentes = []
+            var detenciones = []
+            var horas = []
+            var recorridos = []
+
+            for (var i = 0; i < responseData.length; i++){
+              patentes.push(responseData[i].plate_number)
+              if (responseData[i].bus_speed == "1.0"){
+                detenciones.push("Se detuvo")
+              } else {
+                detenciones.push("No se detuvo")
+              }
+              horas.push(responseData[i].event_time)
+              recorridos.push(responseData[i].route_code)
+            }
 
             var elemento_2 = {
-              patente: ['aa22','cc22'],
-              detencion: ['Se detuvo', 'No se detuvo'],
-              hora: ['8:30', '9:30'],
-              recorrido: ['c01', 'c09']
+              patente: patentes,
+              detencion: detenciones,
+              hora: horas,
+              recorrido: recorridos
             }
 
             this.setState((prevState, props) => ({
@@ -342,12 +408,11 @@ class App extends Component {
             this.setState((prevState, props) => ({
                 BusesData_2: elemento_2
             }));
-            console.log("no");
           }
           })
         // informacion de precionar el boton
         // Paradero 1
-        const url_precionar = 'http://proyectozapo.herokuapp.com/api/v1/amount_of_waiting_time_queries?bus_stops={"data":['+ '"'+this.state.Paraderos[0] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
+        const url_precionar = 'https://proyectozapo.herokuapp.com/api/v1/amount_of_waiting_time_queries?bus_stops={"data":['+ '"'+this.state.Paraderos[0] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
 
         fetch(url_precionar, {
             method: 'GET',
@@ -357,8 +422,9 @@ class App extends Component {
         })
         .then((response) => response.json())
         .then((responseData) => {
-          console.log("Informacion Paradero 1");
+          console.log("Informacion botones paradero 1")
           console.log(responseData)
+          console.log("Informacion botones paradero 1")
           if (responseData.length > 0 ){
             var labels = []
             var data = []
@@ -403,8 +469,6 @@ class App extends Component {
                     }
                   ]
             }
-            console.log("nuevo grafico paradero 1");
-            console.log(elemento);
 
             this.setState((prevState, props) => ({
                 InformacionchartData_1: elemento
@@ -425,13 +489,11 @@ class App extends Component {
             this.setState((prevState, props) => ({
                 InformacionchartData_1: elemento
             }));
-
-            console.log("no");
           }
           })
 
           // paradero 2
-          const url_precionar_2 = 'http://proyectozapo.herokuapp.com/api/v1/amount_of_waiting_time_queries?bus_stops={"data":['+ '"'+this.state.Paraderos[1] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
+          const url_precionar_2 = 'https://proyectozapo.herokuapp.com/api/v1/amount_of_waiting_time_queries?bus_stops={"data":['+ '"'+this.state.Paraderos[1] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
           console.log(url_precionar_2);
           fetch(url_precionar_2, {
               method: 'GET',
@@ -441,8 +503,9 @@ class App extends Component {
           })
           .then((response) => response.json())
           .then((responseData) => {
-            console.log("Paradero 2  informacion")
+            console.log("Informacion botones paradero 2")
             console.log(responseData);
+            console.log("Informacion botones paradero 2")
             if (responseData.length > 0 ){
               var labels_2 = []
               var data_2 = []
@@ -488,8 +551,6 @@ class App extends Component {
                       }
                     ]
               }
-              console.log("nuevo grafico paradero 2");
-              console.log(elemento_2);
 
               this.setState((prevState, props) => ({
                   InformacionchartData_2: elemento_2
@@ -510,11 +571,10 @@ class App extends Component {
               this.setState((prevState, props) => ({
                   InformacionchartData_2: elemento_2
               }));
-              console.log("no");
             }
             })
       } else{
-        console.log("no se puede")
+        console.log("La fecha no permite la consulta")
       }
     }
 
@@ -542,7 +602,7 @@ class App extends Component {
             { this.state.MostrarElementos ?
               <div>
                 <h1 className="Paradero" align="center">Paradero {this.state.Paraderos[0]}</h1>
-                <Ocupacion chartData={this.state.OcupacionchartData_2} legendPosition="bottom" redraw/>
+                <Ocupacion chartData={this.state.OcupacionchartData_1} legendPosition="bottom" redraw/>
                 <div className="row">
                   <div className="column">
                     <Informacion chartData={this.state.InformacionchartData_1} legendPosition="bottom" redraw/>
