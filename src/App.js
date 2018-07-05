@@ -8,6 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Ocupacion from './components/Ocupacion';
 import Buses from './components/Buses';
 import Informacion from './components/Informacion';
+import { Grid, Row, Col } from 'react-flexbox-grid';
 
 class App extends Component {
 
@@ -28,27 +29,17 @@ class App extends Component {
       this.state = {
         OcupacionchartData_1: {}
       }
-      this.state = {
-        OcupacionchartData_2: {}
-      }
 
       this.state = {
         BusesData_1: {}
       }
       this.state = {
-        BusesData_2: {}
-      }
-      this.state = {
         InformacionchartData_1: {}
       }
-      this.state = {
-        InformacionchartData_2: {}
-      }
 
       this.state = {
-        Paraderos: ['PC1049', 'PC164']
+        Paraderos: ['PC1049']
       }
-
 
       this.fechaInicioHandle = this.fechaInicioHandle.bind(this);
       this.fechaTerminoHandle = this.fechaTerminoHandle.bind(this);
@@ -90,22 +81,6 @@ class App extends Component {
           OcupacionchartData_1: graficos_ocupacion_1
         });
 
-        const graficos_ocupacion_2 = {
-              labels: [],
-              datasets:[
-                {
-                  label:'Personas',
-                  data:[],
-                  backgroundColor:[]
-                }
-              ]
-        }
-
-        this.setState({
-          OcupacionchartData_2: graficos_ocupacion_2
-        });
-
-
         // tabla buses por defecto
         const tabla_buses_1 = {
           patente: [],
@@ -115,16 +90,6 @@ class App extends Component {
         }
         this.setState({
           BusesData_1: tabla_buses_1
-        });
-
-        const tabla_buses_2 = {
-          patente: [],
-          detencion: [],
-          hora: [],
-          recorrido: []
-        }
-        this.setState({
-          BusesData_2: tabla_buses_2
         });
 
 
@@ -144,22 +109,6 @@ class App extends Component {
           this.setState({
             InformacionchartData_1: graficos_informacion_1
           });
-
-        const graficos_informacion_2 = {
-                labels: [],
-                datasets:[
-                  {
-                    label:'Oprimidas',
-                    data:[
-                    ],
-                    backgroundColor:[]
-                  }
-                ]
-              }
-
-      this.setState({
-        InformacionchartData_2: graficos_informacion_2
-      });
     }
 
 
@@ -233,72 +182,7 @@ class App extends Component {
             }));
           }
           })
-          // paradero 2
-          const url_ocupacion_2 = "https://proyectozapo.herokuapp.com/api/v1/amount_of_passengers?bus_stop="+this.state.Paraderos[1]+"&start="+start+"&end="+end;
 
-          fetch(url_ocupacion_2, {
-              method: 'GET',
-              headers: {
-                "Authorization": token
-              }
-          })
-          .then((response) => response.json())
-          .then((responseData) => {
-            console.log("Informacion ocupacion paradero 2")
-            console.log(responseData)
-            console.log("Informacion ocupacion paradero 2")
-            if (responseData.error != ""){
-
-              var dates = []
-              var amounts = []
-
-              for (var i = 0; i < responseData.length; i++){
-                dates.push(responseData[i].date)
-                amounts.push(responseData[i].amount)
-              }
-
-
-              var colores = []
-              for (var i = 0; i < dates.length; i++){
-                colores.push('rgba('+ Math.floor((Math.random() * 255) + 1)+ ','+Math.floor((Math.random() * 255) + 1)+','+Math.floor((Math.random() * 255) + 1)+', 0.6)')
-              }
-
-              var elemento_2 = {
-                    labels: dates,
-                    datasets:[
-                      {
-                        label:'Personas',
-                        data:amounts,
-                        backgroundColor:colores
-                      }
-                    ]
-              }
-              console.log("hola");
-              console.log(elemento_2);
-              console.log("hola");
-
-
-              this.setState((prevState, props) => ({
-                  OcupacionchartData_2: elemento_2
-              }));
-            } else {
-              var elemento_2 = {
-                    labels: [],
-                    datasets:[
-                      {
-                        label:'Personas',
-                        data:[],
-                        backgroundColor:[]
-                      }
-                    ]
-              }
-
-
-              this.setState((prevState, props) => ({
-                  OcupacionchartData_2: elemento_2
-              }));
-            }
-            })
           // informacion de los Buses
           //paradero 1
           const url_buses_1 = 'https://proyectozapo.herokuapp.com/api/v1/bus_events?bus_stops={"data":['+ '"'+this.state.Paraderos[0] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
@@ -355,61 +239,7 @@ class App extends Component {
               }));
             }
           })
-        // paradero 2
-        const url_buses_2 = 'https://proyectozapo.herokuapp.com/api/v1/bus_events?bus_stops={"data":['+ '"'+this.state.Paraderos[1] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
 
-        fetch(url_buses_2, {
-            method: 'GET',
-            headers: {
-              "Authorization": token
-            }
-        })
-        .then((response) => response.json())
-        .then((responseData) => {
-          console.log("Informacion Buses paradero 2")
-          console.log(responseData);
-          console.log("Informacion Buses paradero 2")
-          if (responseData.error != ""){
-            // se deveria cambiar la data mas abajo
-            var patentes = []
-            var detenciones = []
-            var horas = []
-            var recorridos = []
-
-            for (var i = 0; i < responseData.length; i++){
-              patentes.push(responseData[i].plate_number)
-              if (responseData[i].bus_speed == "1.0"){
-                detenciones.push("Se detuvo")
-              } else {
-                detenciones.push("No se detuvo")
-              }
-              horas.push(responseData[i].event_time)
-              recorridos.push(responseData[i].route_code)
-            }
-
-            var elemento_2 = {
-              patente: patentes,
-              detencion: detenciones,
-              hora: horas,
-              recorrido: recorridos
-            }
-
-            this.setState((prevState, props) => ({
-                BusesData_2: elemento_2
-            }));
-          } else {
-            var elemento_2 = {
-              patente: [],
-              detencion: [],
-              hora: [],
-              recorrido: []
-            }
-
-            this.setState((prevState, props) => ({
-                BusesData_2: elemento_2
-            }));
-          }
-          })
         // informacion de precionar el boton
         // Paradero 1
         const url_precionar = 'https://proyectozapo.herokuapp.com/api/v1/amount_of_waiting_time_queries?bus_stops={"data":['+ '"'+this.state.Paraderos[0] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
@@ -491,88 +321,6 @@ class App extends Component {
             }));
           }
           })
-
-          // paradero 2
-          const url_precionar_2 = 'https://proyectozapo.herokuapp.com/api/v1/amount_of_waiting_time_queries?bus_stops={"data":['+ '"'+this.state.Paraderos[1] + '"'+']}&start='+start+'&end='+end+'&order_by=asc';
-          console.log(url_precionar_2);
-          fetch(url_precionar_2, {
-              method: 'GET',
-              headers: {
-                "Authorization": token
-              }
-          })
-          .then((response) => response.json())
-          .then((responseData) => {
-            console.log("Informacion botones paradero 2")
-            console.log(responseData);
-            console.log("Informacion botones paradero 2")
-            if (responseData.length > 0 ){
-              var labels_2 = []
-              var data_2 = []
-              var consulta_mal = 0
-              var no_autorizado = 0
-
-              for (var i = 0; i < responseData.length; i++){
-                if (responseData[i].type  == "waiting time query") {
-                  if (labels_2.includes(responseData[i].route_code)){
-                    for(var j = 0; j < labels_2.length; j++){
-                      if (responseData[i].route_code == labels_2[j]){
-                        data_2[j] += 1;
-                      }
-                    }
-                  } else{
-                    labels_2.push(responseData[i].route_code)
-                    data_2.push(1)
-                  }
-                } else if (responseData[i].type  == "failed waiting time query"){
-                  consulta_mal+=1
-                } else if (responseData[i].type  == "not authorized waiting time query"){
-                  no_autorizado+=1
-                }
-              }
-              labels_2.push("Erronea")
-              data_2.push(consulta_mal)
-              labels_2.push("No autorizada")
-              data_2.push(no_autorizado)
-
-
-              var colores_2 = []
-              for (var i = 0; i < labels_2.length; i++){
-                colores_2.push('rgba('+ Math.floor((Math.random() * 255) + 1)+ ','+Math.floor((Math.random() * 255) + 1)+','+Math.floor((Math.random() * 255) + 1)+', 0.6)')
-              }
-
-              var elemento_2 = {
-                    labels: labels_2,
-                    datasets:[
-                      {
-                        label:'Oprimidas',
-                        data: data_2,
-                        backgroundColor: colores_2
-                      }
-                    ]
-              }
-
-              this.setState((prevState, props) => ({
-                  InformacionchartData_2: elemento_2
-              }));
-
-            } else {
-              var elemento_2 = {
-                    labels: [],
-                    datasets:[
-                      {
-                        label:'Oprimidas',
-                        data: [],
-                        backgroundColor: []
-                      }
-                    ]
-              }
-
-              this.setState((prevState, props) => ({
-                  InformacionchartData_2: elemento_2
-              }));
-            }
-            })
       } else{
         console.log("La fecha no permite la consulta")
       }
@@ -601,27 +349,19 @@ class App extends Component {
 
             { this.state.MostrarElementos ?
               <div>
-                <h1 className="Paradero" align="center">Paradero {this.state.Paraderos[0]}</h1>
-                <Ocupacion chartData={this.state.OcupacionchartData_1} legendPosition="bottom" redraw/>
-                <div className="row">
-                  <div className="column">
-                    <Informacion chartData={this.state.InformacionchartData_1} legendPosition="bottom" redraw/>
-                  </div>
-                  <div className="column">
-                    <Buses tableData={this.state.BusesData_1}/>
-                  </div>
-                </div>
-                <h1 className="Paradero" align="center">Paradero {this.state.Paraderos[1]}</h1>
-                <Ocupacion chartData={this.state.OcupacionchartData_2} legendPosition="bottom" redraw/>
-                <div className="row">
-                  <div className="column">
-                    <Informacion chartData={this.state.InformacionchartData_2} legendPosition="bottom" redraw/>
-                  </div>
-                  <div className="column">
-                    <Buses tableData={this.state.BusesData_2}/>
-                  </div>
-                </div>
+				<Grid fluid>
+				<Row>
+				  <Col xs={6} md={6}>
+					<Ocupacion chartData={this.state.OcupacionchartData_1} redraw/>
+				  </Col>
+				  <Col xs={6} md={6}>
+					<Informacion chartData={this.state.InformacionchartData_1} redraw/>
+				  </Col>
+				</Row>
+			  </Grid>
+			  <Buses tableData={this.state.BusesData_1} />
               </div>
+			  
             : null }
           </div>
         </div>

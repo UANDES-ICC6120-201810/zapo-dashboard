@@ -35,13 +35,12 @@ class Buses extends Component {
       <table className="table">
         <thead className="thead-dark">
           <tr>
-            <th>Patente</th>
-            <th>Detencion</th>
-            <th>Hora</th>
-            <th>Recorrido</th>
+            <tr>
+            <th>Patente Detencion Hora Recorrido</th>
+          </tr>
           </tr>
         </thead>
-        <tbody>
+        <tbody style={{'height': '300px','overflow':'scroll', 'display': 'block'}}>
           {this.createTable()}
         </tbody>
       </table>
