@@ -8,7 +8,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Ocupacion from './components/Ocupacion';
 import Buses from './components/Buses';
 import Informacion from './components/Informacion';
-import { Grid, Row, Col } from 'react-flexbox-grid';
 
 class App extends Component {
 
@@ -40,6 +39,7 @@ class App extends Component {
       this.state = {
         Paraderos: ['PC1049']
       }
+
 
       this.fechaInicioHandle = this.fechaInicioHandle.bind(this);
       this.fechaTerminoHandle = this.fechaTerminoHandle.bind(this);
@@ -119,7 +119,7 @@ class App extends Component {
       if (this.state.startDate != null && this.state.endDate != null) {
         this.state.MostrarElementos = true;
         var start = this.state.startDate.format("YYYY-MM-DD") + " 00:00"
-        var end = this.state.endDate.format("YYYY-MM-DD") + " 24:00"
+        var end = this.state.endDate.format("YYYY-MM-DD") + " 23:59"
 
         // informacion ocupacion
         //paradero 1
@@ -141,9 +141,32 @@ class App extends Component {
             var dates = []
             var amounts = []
 
-            for (var i = 0; i < responseData.length; i++){
-              dates.push(responseData[i].date)
-              amounts.push(responseData[i].amount)
+            var current_time = this.state.startDate
+            var current_time_string = start
+            var h = 0
+
+            while (current_time.format("YYYY-MM-DD HH:mm") != end){
+              console.log("actuales")
+
+              console.log(current_time.format("YYYY-MM-DD HH:mm"))
+              console.log(end)
+              console.log("actuales")
+
+              if (h < responseData.length) {
+                if (responseData[h].date == (current_time.format("YYYY-MM-DD HH:mm")+":00")){
+                  dates.push(responseData[h].date)
+                  amounts.push(responseData[h].amount)
+                  h+=1
+                } else {
+                  dates.push(current_time_string)
+                  amounts.push(responseData[h].amount)
+                }
+                current_time = this.state.startDate.add(1, 'minutes')
+                current_time_string = current_time.format("YYYY-MM-DD HH:mm")
+              }
+              else {
+                h+=1
+              }
             }
             var colores = []
             for (var i = 0; i < dates.length; i++){
@@ -159,9 +182,6 @@ class App extends Component {
                     }
                   ]
             }
-            console.log("hola");
-            console.log(elemento_1);
-            console.log("hola");
 
             this.setState((prevState, props) => ({
                 OcupacionchartData_1: elemento_1
@@ -207,7 +227,7 @@ class App extends Component {
 
               for (var i = 0; i < responseData.length; i++){
                 patentes.push(responseData[i].plate_number)
-                if (responseData[i].bus_speed == "1.0"){
+                if (responseData[i].bus_speed == "0.0"){
                   detenciones.push("Se detuvo")
                 } else {
                   detenciones.push("No se detuvo")
@@ -349,19 +369,17 @@ class App extends Component {
 
             { this.state.MostrarElementos ?
               <div>
-				<Grid fluid>
-				<Row>
-				  <Col xs={6} md={6}>
-					<Ocupacion chartData={this.state.OcupacionchartData_1} redraw/>
-				  </Col>
-				  <Col xs={6} md={6}>
-					<Informacion chartData={this.state.InformacionchartData_1} redraw/>
-				  </Col>
-				</Row>
-			  </Grid>
-			  <Buses tableData={this.state.BusesData_1} />
+                <h1 className="Paradero" align="center">Paradero {this.state.Paraderos[0]}</h1>
+                <Ocupacion chartData={this.state.OcupacionchartData_1} legendPosition="bottom" redraw/>
+                <div className="row">
+                  <div className="column">
+                    <Informacion chartData={this.state.InformacionchartData_1} legendPosition="bottom" redraw/>
+                  </div>
+                  <div className="column">
+                    <Buses tableData={this.state.BusesData_1}/>
+                  </div>
+                </div>
               </div>
-			  
             : null }
           </div>
         </div>

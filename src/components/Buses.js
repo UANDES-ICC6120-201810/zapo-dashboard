@@ -17,10 +17,10 @@ class Buses extends Component {
       for (let i = 0; i < this.props.tableData.patente.length; i++) {
         let children = []
         //Inner loop to create children
-        children.push(<td>{this.props.tableData.patente[i]}</td>)
-        children.push(<td>{this.props.tableData.detencion[i]}</td>)
-        children.push(<td>{this.props.tableData.hora[i]}</td>)
-        children.push(<td>{this.props.tableData.recorrido[i]}</td>)
+        children.push(<td style={{'width':'400px'}}>{this.props.tableData.patente[i]}</td>)
+        children.push(<td style={{'width':'400px'}}>{this.props.tableData.detencion[i]}</td>)
+        children.push(<td style={{'width':'400px'}}>{this.props.tableData.hora[i]}</td>)
+        children.push(<td style={{'width':'400px'}}>{this.props.tableData.recorrido[i]}</td>)
         //Create the parent and add the children
         table.push(<tr>{children}</tr>)
       }
@@ -36,11 +36,17 @@ class Buses extends Component {
         <thead className="thead-dark">
           <tr>
             <tr>
-            <th>Patente Detencion Hora Recorrido</th>
+            <th></th>
           </tr>
           </tr>
         </thead>
         <tbody style={{'height': '300px','overflow':'scroll', 'display': 'block'}}>
+          <tr>
+            <td style={{'width':'400px', 'fontWeight': 'bold'}}>Patente</td>
+            <td style={{'width':'400px', 'fontWeight': 'bold'}}>Detencion</td>
+            <td style={{'width':'400px', 'fontWeight': 'bold'}}>Hora</td>
+            <td style={{'width':'400px', 'fontWeight': 'bold'}}>Recorrido</td>
+          </tr>
           {this.createTable()}
         </tbody>
       </table>

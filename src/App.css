@@ -26,6 +26,19 @@
     clear: both;
 }
 
+.button1 {
+    background-color: white;
+    color: black;
+    margin: 10px;
+    border: 2px solid #f44336;
+}
+
+.button1:hover {
+    background-color: #f44336;
+    color: white;
+}
+
+
 .App-graficos {
   padding: 40px;
 }
